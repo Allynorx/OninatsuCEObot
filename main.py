@@ -3,6 +3,14 @@ from typing import Final
 # pip install python-telegram-bot
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+import tracemalloc
+import random 
+import os
+
+tracemalloc.start()
+
+# Ruta de la carpeta donde tienes las imágenes
+ruta_carpeta_imagenes = 'C:\\Users\\Francisco\\Desktop\\TelegramBOT\\Images\\liellas'
 
 print('Preparando a la besto liella...')
 
@@ -23,6 +31,15 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Lets us use the /custom command
 async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text('Este es un comando personalizable.')
+    
+    
+async def enviar_love_live_command(update, context: ContextTypes.DEFAULT_TYPE): 
+     # Obtiene una lista de todas las imágenes en la carpeta
+    lista_imagenes = os.listdir(ruta_carpeta_imagenes)
+    # Selecciona una imagen al azar de la lista
+    imagen_aleatoria = random.choice(lista_imagenes)
+    # Envía la imagen al chat de Telegram
+    await context.bot.send_photo(chat_id=update.effective_chat.id, photo=open(ruta_carpeta_imagenes + '/' + imagen_aleatoria, 'rb'))
 
 
 def handle_response(text: str) -> str:
@@ -40,6 +57,9 @@ def handle_response(text: str) -> str:
     
     if 'cual es la mejor liella?' in processed:
         return 'Obviamente su servidora, pero no puedo decir eso al public... digo todas tienen lo suyo'
+    
+    if 'hentai' in processed:
+        return 'Lo siento Natsumi no puede hablar de eso. Mi creador me impide mandar ese tipo de contenido. Busquese otra pervertido.'
 
     return 'No entiendo :c...'
 
@@ -81,6 +101,7 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler('start', start_command))
     app.add_handler(CommandHandler('help', help_command))
     app.add_handler(CommandHandler('custom', custom_command))
+    app.add_handler(CommandHandler('enviarlovelive', enviar_love_live_command))
 
     # Messages
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
@@ -91,6 +112,11 @@ if __name__ == '__main__':
     print('Polling...')
     # Run the bot
     app.run_polling(poll_interval=5)
+    
+    
+
+    
+
     
     
         
