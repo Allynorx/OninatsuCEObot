@@ -1,12 +1,16 @@
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, Updater
 from typing import Final
+from queue import Queue
 import tracemalloc
 import random 
 import os
 import schedule
 import time 
 import logging
+
+#crear Queue
+update_queue = Queue()
 
 tracemalloc.start()
 
@@ -153,8 +157,6 @@ async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Run the program
 if __name__ == '__main__':
     app = Application.builder().token(TOKEN).build()
-#updated se conecta y recibe los mensajes
-updater = Updater(BOT_USERNAME.token, use_context = True)
 
     # Commands
     app.add_handler(CommandHandler('start', start_command))
@@ -173,13 +175,14 @@ updater = Updater(BOT_USERNAME.token, use_context = True)
     print('Polling...')
     # Run the bot
     app.run_polling(poll_interval=5)
+
       
 #Dispatcher
 dp = updater.dispatcher
 
 
 
-# Función para enviar las imágenes
+# Función para enviar las imágenes/ ?
 async def send_images(update, context: ContextTypes.DEFAULT_TYPE):
     # Obtenemos la lista de imágenes
     images = os.listdir('images/lunesdechika')
@@ -199,14 +202,3 @@ while True:
     schedule.run_pending()
     time.sleep(1)
     
-    
-
-    
-
-    
-    
-        
-
-
-
-
